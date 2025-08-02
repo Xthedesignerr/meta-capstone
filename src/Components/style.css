@@ -1,0 +1,191 @@
+/* Colors */
+:root {
+    --eerie-black: #191716ff;
+    --xanthous: #e6af2eff;
+    --alabaster: #e0e2dbff;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+    background-color: var(--alabaster);
+    color: var(--eerie-black);
+    font-family: var(--font-family);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Container */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  /* HEADER */
+  .header {
+    background-color: var(--eerie-black);
+    padding: 1rem 0;
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--xanthous);
+    letter-spacing: 2px;
+    user-select: none;
+  }
+  
+  /* NAVIGATION */
+  .nav .nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-links a {
+    color: var(--alabaster);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .nav-links a:hover,
+  .nav-links a.active {
+    background-color: var(--xanthous);
+    color: var(--eerie-black);
+  }
+  
+  /* MAIN RESERVATION SECTION */
+  .main-section {
+    flex-grow: 1;
+    padding: 3rem 0;
+  }
+  
+  .reservation-section {
+    background-color: white;
+    padding: 2.5rem 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+  }
+  
+  .reservation-section h1 {
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+    font-size: 2.25rem;
+    color: var(--eerie-black);
+  }
+  
+  .reservation-section p {
+    margin-top: 0;
+    margin-bottom: 2rem;
+    color: var(--eerie-black);
+    font-weight: 400;
+    font-size: 1.125rem;
+  }
+  
+  .reservation-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--eerie-black);
+  }
+  
+  input,
+  select {
+    padding: 0.6rem 0.8rem;
+    border: 2px solid var(--eerie-black);
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: var(--font-family);
+    transition: border-color 0.3s ease;
+    background-color: var(--alabaster);
+    color: var(--eerie-black);
+  }
+  
+  input:focus,
+  select:focus {
+    outline: none;
+    border-color: var(--xanthous);
+    background-color: white;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  
+  .half-width {
+    flex: 1;
+    min-width: 150px;
+  }
+  
+  .btn-primary {
+    background-color: var(--xanthous);
+    color: var(--eerie-black);
+    font-weight: 700;
+    padding: 0.85rem 1.5rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.125rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    align-self: flex-start;
+    box-shadow: 0 4px 12px rgba(230, 175, 46, 0.5);
+  }
+  
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background-color: #d49b00;
+    color: var(--alabaster);
+    outline: none;
+    box-shadow: 0 6px 15px rgba(212, 155, 0, 0.7);
+  }
+  
+  /* Confirmation message */
+  .confirmation-message {
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    background-color: var(--xanthous);
+    color: var(--eerie-black);
+    font-weight: 600;
+    font-size: 1.125rem;
+    text-align: center;
+    user-select: none;
+  }
+  
+  /* FOOTER */
+  .footer {
+    background-color: var(--alabaster);
+  }
