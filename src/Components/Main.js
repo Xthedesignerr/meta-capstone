@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { fetchAPI, submitAPI } from '../api'; // make sure api.js is in src/
 import './Main.css';
-
 
 const Main = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +11,18 @@ const Main = () => {
     time: '',
     guests: '',
   });
+  const [availableTimes, setAvailableTimes] = useState([]);
   const [submitted, setSubmitted] = useState(false);
+
+  // Fetch available times whenever date changes
+  useEffect(() => {
+    if (formData.date) {
+      const times = fetchAPI(new Date(formData.date));
+      setAvailableTimes(times);
+    } else {
+      setAvailableTimes([]);
+    }
+  }, [formData.date]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,20 +38,27 @@ const Main = () => {
       return;
     }
 
-    setSubmitted(true);
+    // Submit reservation using API
+    const success = submitAPI(formData);
 
-    // Reset form after showing confirmation
-    setTimeout(() => {
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        date: '',
-        time: '',
-        guests: '',
-      });
-      setSubmitted(false);
-    }, 5000);
+    if (success) {
+      setSubmitted(true);
+
+      setTimeout(() => {
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          date: '',
+          time: '',
+          guests: '',
+        });
+        setAvailableTimes([]);
+        setSubmitted(false);
+      }, 5000);
+    } else {
+      alert('Something went wrong. Please try again.');
+    }
   };
 
   return (
@@ -102,14 +120,20 @@ const Main = () => {
 
             <div className="form-group half-width">
               <label htmlFor="time">Time *</label>
-              <input
+              <select
                 id="time"
                 name="time"
-                type="time"
                 value={formData.time}
                 onChange={handleChange}
                 required
-              />
+              >
+                <option value="" disabled>Select time</option>
+                {availableTimes.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -122,9 +146,7 @@ const Main = () => {
               onChange={handleChange}
               required
             >
-              <option value="" disabled>
-                Select guests
-              </option>
+              <option value="" disabled>Select guests</option>
               <option value="1">1 Guest</option>
               <option value="2">2 Guests</option>
               <option value="3">3 Guests</option>
