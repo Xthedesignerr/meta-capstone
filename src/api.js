@@ -7,11 +7,10 @@ export const fetchAPI = (date) => {
     const hours = ['17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00'];
     return hours;
   };
-  
+
   // Mock function to submit booking form data
   export const submitAPI = (formData) => {
     console.log('Submitting booking:', formData);
     // Returns true if submission was successful
     return true;
   };
-  
