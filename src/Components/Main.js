@@ -14,8 +14,10 @@ const Main = () => {
     time: "",
     guests: "",
   });
+
   const [availableTimes, setAvailableTimes] = useState([]);
   const [submitted, setSubmitted] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
 
   useEffect(() => {
     if (formData.date) {
@@ -26,17 +28,58 @@ const Main = () => {
     }
   }, [formData.date]);
 
+  // ✅ Validation logic
+  const validateForm = (data) => {
+    let errors = {};
+
+    if (!data.name.trim()) {
+      errors.name = "Full name is required.";
+    } else if (data.name.length < 2) {
+      errors.name = "Name must be at least 2 characters.";
+    }
+
+    if (!data.email) {
+      errors.email = "Email is required.";
+    } else if (!/\S+@\S+\.\S+/.test(data.email)) {
+      errors.email = "Enter a valid email address.";
+    }
+
+    if (data.phone && !/^[0-9]{10,15}$/.test(data.phone)) {
+      errors.phone = "Phone number must be 10–15 digits.";
+    }
+
+    if (!data.date) {
+      errors.date = "Date is required.";
+    }
+
+    if (!data.time) {
+      errors.time = "Please select a time.";
+    }
+
+    if (!data.guests) {
+      errors.guests = "Number of guests is required.";
+    }
+
+    return errors;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const updatedForm = { ...formData, [name]: value };
+    setFormData(updatedForm);
+
+    // Live validation
+    setValidationErrors(validateForm(updatedForm));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.date || !formData.time || !formData.guests) {
-      alert("Please fill in all required fields.");
-      return;
+    const errors = validateForm(formData);
+    setValidationErrors(errors);
+
+    if (Object.keys(errors).length > 0) {
+      return; // Stop submission if errors exist
     }
 
     const success = submitAPI(formData);
@@ -49,6 +92,9 @@ const Main = () => {
     }
   };
 
+  const isFormValid = Object.keys(validationErrors).length === 0 &&
+    formData.name && formData.email && formData.date && formData.time && formData.guests;
+
   return (
     <main className="main-section">
       <section className="reservation-section">
@@ -56,6 +102,7 @@ const Main = () => {
         <p>Book your spot at Little Lemon!</p>
 
         <form className="reservation-form" onSubmit={handleSubmit} noValidate>
+          {/* Full Name */}
           <div className="form-group">
             <label htmlFor="name">Full Name *</label>
             <input
@@ -65,9 +112,12 @@ const Main = () => {
               value={formData.name}
               onChange={handleChange}
               required
+              minLength={2}
             />
+            {validationErrors.name && <small className="error">{validationErrors.name}</small>}
           </div>
 
+          {/* Email */}
           <div className="form-group">
             <label htmlFor="email">Email *</label>
             <input
@@ -77,9 +127,12 @@ const Main = () => {
               value={formData.email}
               onChange={handleChange}
               required
+              pattern="\S+@\S+\.\S+"
             />
+            {validationErrors.email && <small className="error">{validationErrors.email}</small>}
           </div>
 
+          {/* Phone */}
           <div className="form-group">
             <label htmlFor="phone">Phone</label>
             <input
@@ -88,9 +141,12 @@ const Main = () => {
               type="tel"
               value={formData.phone}
               onChange={handleChange}
+              pattern="[0-9]{10,15}"
             />
+            {validationErrors.phone && <small className="error">{validationErrors.phone}</small>}
           </div>
 
+          {/* Date & Time */}
           <div className="form-row">
             <div className="form-group half-width">
               <label htmlFor="date">Date *</label>
@@ -102,6 +158,7 @@ const Main = () => {
                 onChange={handleChange}
                 required
               />
+              {validationErrors.date && <small className="error">{validationErrors.date}</small>}
             </div>
 
             <div className="form-group half-width">
@@ -120,9 +177,11 @@ const Main = () => {
                   </option>
                 ))}
               </select>
+              {validationErrors.time && <small className="error">{validationErrors.time}</small>}
             </div>
           </div>
 
+          {/* Guests */}
           <div className="form-group">
             <label htmlFor="guests">Guests *</label>
             <select
@@ -141,9 +200,11 @@ const Main = () => {
               <option value="6">6 Guests</option>
               <option value="7+">7+ Guests</option>
             </select>
+            {validationErrors.guests && <small className="error">{validationErrors.guests}</small>}
           </div>
 
-          <button type="submit" className="btn-primary" disabled={submitted}>
+          {/* Submit */}
+          <button type="submit" className="btn-primary" disabled={!isFormValid || submitted}>
             {submitted ? "Reserved!" : "Reserve Now"}
           </button>
         </form>

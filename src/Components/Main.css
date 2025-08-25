@@ -37,6 +37,7 @@
 .form-group {
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .form-group label {
@@ -51,15 +52,44 @@
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
-  transition: border 0.2s ease;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
 }
 
 .form-group input:focus,
 .form-group select:focus {
   border-color: #f4ce14; /* Little Lemon yellow */
   outline: none;
+  box-shadow: 0 0 0 3px rgba(244, 206, 20, 0.25);
 }
 
+/* ✅ Validation Styles */
+.form-group input.error,
+.form-group select.error {
+  border-color: #e63946;
+  background-color: #fff5f5;
+}
+
+.form-group input.success,
+.form-group select.success {
+  border-color: #38a169;
+  background-color: #f6fffa;
+}
+
+.error-message {
+  color: #e63946;
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+.success-message {
+  color: #38a169;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+  font-weight: 500;
+}
+
+/* Form Row */
 .form-row {
   display: flex;
   gap: 1rem;
@@ -71,6 +101,7 @@
   min-width: 120px;
 }
 
+/* Buttons */
 .btn-primary {
   background-color: #f4ce14;
   color: #000;
@@ -83,10 +114,16 @@
   transition: all 0.3s ease;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background-color: #e2bb10;
 }
 
+.btn-primary:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Confirmation Message */
 .confirmation-message {
   margin-top: 2rem;
   padding: 1rem;
