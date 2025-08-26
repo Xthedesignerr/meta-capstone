@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchAPI, submitAPI } from "../api";
-import "./Main.css"; // ✅ make sure this import is here
+import "./Main.css";
 
 const Main = () => {
   const navigate = useNavigate();
@@ -92,8 +92,13 @@ const Main = () => {
     }
   };
 
-  const isFormValid = Object.keys(validationErrors).length === 0 &&
-    formData.name && formData.email && formData.date && formData.time && formData.guests;
+  const isFormValid =
+    Object.keys(validationErrors).length === 0 &&
+    formData.name &&
+    formData.email &&
+    formData.date &&
+    formData.time &&
+    formData.guests;
 
   return (
     <main className="main-section">
@@ -101,7 +106,15 @@ const Main = () => {
         <h1>Reserve Your Table</h1>
         <p>Book your spot at Little Lemon!</p>
 
-        <form className="reservation-form" onSubmit={handleSubmit} noValidate>
+        {/* ✅ Form-level instructions */}
+        <p id="formInstructions">Fields marked with * are required.</p>
+
+        <form
+          className="reservation-form"
+          onSubmit={handleSubmit}
+          noValidate
+          aria-describedby="formInstructions"
+        >
           {/* Full Name */}
           <div className="form-group">
             <label htmlFor="name">Full Name *</label>
@@ -113,8 +126,14 @@ const Main = () => {
               onChange={handleChange}
               required
               minLength={2}
+              aria-invalid={!!validationErrors.name}
+              aria-describedby={validationErrors.name ? "nameError" : undefined}
             />
-            {validationErrors.name && <small className="error">{validationErrors.name}</small>}
+            {validationErrors.name && (
+              <small id="nameError" className="error">
+                {validationErrors.name}
+              </small>
+            )}
           </div>
 
           {/* Email */}
@@ -128,8 +147,14 @@ const Main = () => {
               onChange={handleChange}
               required
               pattern="\S+@\S+\.\S+"
+              aria-invalid={!!validationErrors.email}
+              aria-describedby={validationErrors.email ? "emailError" : undefined}
             />
-            {validationErrors.email && <small className="error">{validationErrors.email}</small>}
+            {validationErrors.email && (
+              <small id="emailError" className="error">
+                {validationErrors.email}
+              </small>
+            )}
           </div>
 
           {/* Phone */}
@@ -142,8 +167,14 @@ const Main = () => {
               value={formData.phone}
               onChange={handleChange}
               pattern="[0-9]{10,15}"
+              aria-invalid={!!validationErrors.phone}
+              aria-describedby={validationErrors.phone ? "phoneError" : undefined}
             />
-            {validationErrors.phone && <small className="error">{validationErrors.phone}</small>}
+            {validationErrors.phone && (
+              <small id="phoneError" className="error">
+                {validationErrors.phone}
+              </small>
+            )}
           </div>
 
           {/* Date & Time */}
@@ -157,8 +188,14 @@ const Main = () => {
                 value={formData.date}
                 onChange={handleChange}
                 required
+                aria-invalid={!!validationErrors.date}
+                aria-describedby={validationErrors.date ? "dateError" : undefined}
               />
-              {validationErrors.date && <small className="error">{validationErrors.date}</small>}
+              {validationErrors.date && (
+                <small id="dateError" className="error">
+                  {validationErrors.date}
+                </small>
+              )}
             </div>
 
             <div className="form-group half-width">
@@ -169,15 +206,24 @@ const Main = () => {
                 value={formData.time}
                 onChange={handleChange}
                 required
+                aria-label="Select a reservation time"
+                aria-invalid={!!validationErrors.time}
+                aria-describedby={validationErrors.time ? "timeError" : undefined}
               >
-                <option value="" disabled>Select time</option>
+                <option value="" disabled>
+                  Select time
+                </option>
                 {availableTimes.map((t) => (
                   <option key={t} value={t}>
                     {t}
                   </option>
                 ))}
               </select>
-              {validationErrors.time && <small className="error">{validationErrors.time}</small>}
+              {validationErrors.time && (
+                <small id="timeError" className="error">
+                  {validationErrors.time}
+                </small>
+              )}
             </div>
           </div>
 
@@ -190,8 +236,13 @@ const Main = () => {
               value={formData.guests}
               onChange={handleChange}
               required
+              aria-label="Select number of guests"
+              aria-invalid={!!validationErrors.guests}
+              aria-describedby={validationErrors.guests ? "guestsError" : undefined}
             >
-              <option value="" disabled>Select guests</option>
+              <option value="" disabled>
+                Select guests
+              </option>
               <option value="1">1 Guest</option>
               <option value="2">2 Guests</option>
               <option value="3">3 Guests</option>
@@ -200,11 +251,20 @@ const Main = () => {
               <option value="6">6 Guests</option>
               <option value="7+">7+ Guests</option>
             </select>
-            {validationErrors.guests && <small className="error">{validationErrors.guests}</small>}
+            {validationErrors.guests && (
+              <small id="guestsError" className="error">
+                {validationErrors.guests}
+              </small>
+            )}
           </div>
 
           {/* Submit */}
-          <button type="submit" className="btn-primary" disabled={!isFormValid || submitted}>
+          <button
+            type="submit"
+            className="btn-primary"
+            disabled={!isFormValid || submitted}
+            aria-label="Reserve a table"
+          >
             {submitted ? "Reserved!" : "Reserve Now"}
           </button>
         </form>
